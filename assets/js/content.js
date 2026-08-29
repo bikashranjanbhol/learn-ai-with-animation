@@ -8,7 +8,19 @@ import backprop     from './lessons/backprop.js';
 import embeddings   from './lessons/embeddings.js';
 import attention    from './lessons/attention.js';
 import generation   from './lessons/generation.js';
+
 import promptEngineering from './lessons/prompt-engineering.js';
+import peAnatomy     from './lessons/pe-anatomy.js';
+import peZeroFewShot from './lessons/pe-zero-few-shot.js';
+import peRoles       from './lessons/pe-roles.js';
+import peReasoning   from './lessons/pe-reasoning.js';
+import peStructured  from './lessons/pe-structured-output.js';
+import peContext     from './lessons/pe-context.js';
+import peRag         from './lessons/pe-rag.js';
+import peTools       from './lessons/pe-tools.js';
+import peSafety      from './lessons/pe-safety.js';
+import peEvals       from './lessons/pe-evals.js';
+import peProduction  from './lessons/pe-production.js';
 
 import sdEstimation from './lessons/sd-estimation.js';
 import sdLatency    from './lessons/sd-latency.js';
@@ -32,7 +44,10 @@ export const sections = [
   { track: SD, title: 'Scaling Out',        lessons: [sdLoadBal, sdData, sdConsistency] },
   { track: SD, title: 'Staying Up',         lessons: [sdResilience, sdCaseStudy] },
 
-  { track: PE, title: 'Foundations',        lessons: [promptEngineering] },
+  { track: PE, title: 'Foundations', lessons: [promptEngineering, peAnatomy, peRoles] },
+  { track: PE, title: 'Prompting Techniques', lessons: [peZeroFewShot, peReasoning, peStructured] },
+  { track: PE, title: 'Context and Tools', lessons: [peContext, peRag, peTools] },
+  { track: PE, title: 'Reliability and Production', lessons: [peSafety, peEvals, peProduction] },
 ];
 
 // Decorate each lesson with where it sits, then flatten in reading order.
@@ -54,7 +69,7 @@ export const tracks = [AI, SD, PE].map(track => {
       ? 'What a model is, how it learns, and how a transformer turns that into text.'
       : track === SD
         ? 'Estimating scale, keeping latency low, and staying up when parts fail.'
-        : 'Write clearer instructions, provide useful context, constrain outputs, and evaluate prompts systematically.',
+        : 'From clear instructions and few-shot examples to RAG, tools, prompt injection defense, evals, and production reliability.',
   };
 });
 
