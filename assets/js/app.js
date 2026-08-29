@@ -10,6 +10,7 @@ const els = {
   article:      $('#article'),
   main:         $('#main'),
   nav:          $('#sidebarNav'),
+  headerNav:    $('#headerNav'),
   navEmpty:     $('#sidebarEmpty'),
   toc:          $('#toc'),
   search:       $('#search'),
@@ -61,6 +62,49 @@ function refreshProgress() {
   els.progressMeter.setAttribute('aria-valuenow', String(pct));
   document.querySelectorAll('.nav-link').forEach(a => {
     a.classList.toggle('done', done.has(a.dataset.id));
+  });
+}
+
+/* -------------------------- header menu -------------------------- */
+const RESUME_KEY = 'ltb:resume';
+const readResume = () => {
+  try { return JSON.parse(localStorage.getItem(RESUME_KEY) || '{}'); }
+  catch { return {}; }
+};
+let resume = readResume();
+
+const TRACK_ICONS = {
+  'How AI Works': '<circle cx="6" cy="6.5" r="2.1"/><circle cx="6" cy="17.5" r="2.1"/><circle cx="18" cy="12" r="2.3"/><path d="M8 7.6l7.9 3.5M8 16.4l7.9-3.5"/>',
+  'System Design': '<rect x="3.5" y="4" width="17" height="6" rx="1.6"/><rect x="3.5" y="14" width="17" height="6" rx="1.6"/><path d="M7 7h.01M7 17h.01"/>',
+};
+
+/** Where a track's menu entry should point: the last lesson read in it, else its first. */
+function trackTarget(t) {
+  const remembered = resume[t.track];
+  return byId.has(remembered) ? remembered : t.lessons[0].id;
+}
+
+function buildHeaderNav() {
+  els.headerNav.innerHTML = tracks.map(t => `
+    <a data-track="${esc(t.track)}" href="#/${trackTarget(t)}"
+       aria-label="${esc(t.track)} — ${t.lessons.length} lessons" title="${esc(t.track)} · ${t.lessons.length} lessons">
+      <svg viewBox="0 0 24 24" aria-hidden="true">${TRACK_ICONS[t.track] || ''}</svg>
+      <span>${esc(t.track)}</span>
+    </a>`).join('');
+}
+
+function markActiveTrack(lesson) {
+  if (lesson) {
+    resume[lesson.track] = lesson.id;
+    localStorage.setItem(RESUME_KEY, JSON.stringify(resume));
+  }
+  els.headerNav.querySelectorAll('a').forEach(a => {
+    const t = tracks.find(t => t.track === a.dataset.track);
+    a.href = `#/${trackTarget(t)}`;
+    const active = !!lesson && lesson.track === a.dataset.track;
+    a.classList.toggle('active', active);
+    if (active) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
   });
 }
 
@@ -173,11 +217,13 @@ function render() {
     document.title = 'Learn to Build — AI and System Design, Visually';
     els.article.innerHTML = home.body({ tracks, lessons, done });
     markActiveNav(null);
+    markActiveTrack(null);
     teardown = home.init?.(els.article) || null;
   } else {
     document.title = `${lesson.title} · Learn to Build`;
     els.article.innerHTML = lessonShell(lesson);
     markActiveNav(lesson.id);
+    markActiveTrack(lesson);
     teardown = lesson.init?.(els.article) || null;
     wireLessonActions(lesson);
   }
@@ -288,6 +334,7 @@ function slug(s) {
 function prefersMotion() { return matchMedia('(prefers-reduced-motion: reduce)').matches; }
 
 /* ------------------------------- boot ------------------------------- */
+buildHeaderNav();
 buildNav();
 refreshProgress();
 render();

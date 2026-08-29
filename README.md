@@ -10,13 +10,18 @@ can drag, tune, or watch run.
 
 | Region | What it does |
 | --- | --- |
-| **Header** | Brand, lesson search (press <kbd>/</kbd>), light/dark toggle, reading-progress bar |
+| **Header** | Brand, a menu of the two subjects, lesson search (press <kbd>/</kbd>), light/dark toggle, reading-progress bar |
 | **Left sidebar** | Both tracks in full, grouped into sections, with per-lesson completion tracking |
 | **Main content** | The lesson itself, with live canvas demos inline |
 | **Right sidebar** | "On this page" outline that follows you as you scroll |
 
-On narrow screens both sidebars become drawers and the search box moves into
-the navigation drawer.
+Each subject in the header menu highlights while you are reading it and links
+back to the last lesson you had open in that track, so switching subjects
+resumes rather than restarts.
+
+On narrow screens both sidebars become drawers, the subject menu gives way to
+the drawer (which lists both tracks in full), and the search box moves into
+that drawer.
 
 ## The course
 
