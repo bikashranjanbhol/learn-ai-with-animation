@@ -87,7 +87,19 @@ assets/js/lessons/      one module per lesson, plus the home page
 
 ## Deployment
 
-Pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
-which publishes the repository root to GitHub Pages. The workflow enables Pages
-on first run; if the repository settings block that, set
-**Settings → Pages → Source** to **GitHub Actions** once and re-run it.
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) publishes the
+repository root to GitHub Pages on every push to `main`, `master` or a
+`claude/**` branch, and can also be run by hand from the Actions tab.
+
+**One-time setup.** GitHub does not let a workflow's built-in token create the
+Pages site itself, so the first deploy fails with
+*"Create Pages site failed: Resource not accessible by integration"* until an
+account with repository admin does this once:
+
+1. **Settings → Pages**
+2. Set **Source** to **GitHub Actions**
+3. **Actions → Deploy to GitHub Pages → Run workflow** (or push any commit)
+
+The site is then served from
+`https://<owner>.github.io/learn-ai-with-animation/` and every later push
+redeploys it automatically.
