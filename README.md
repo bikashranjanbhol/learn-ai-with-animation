@@ -76,6 +76,20 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
+## Working on this with an AI agent
+
+[`AGENTS.md`](AGENTS.md) is the contract: project shape, the lesson module
+contract, the demo rules, CSS gotchas, and a table of bugs this codebase has
+already had so they do not come back. OpenAI Codex reads it directly;
+[`CLAUDE.md`](CLAUDE.md) points Claude Code at the same file and adds the
+browser-verification script. `.claude/skills/new-lesson/` is a Claude Code skill
+that walks the whole add-a-lesson flow.
+
+The short version for any agent: no build step and no dependencies, every lesson
+carries a working simulation rather than a diagram, colours come from theme
+tokens only, `init()` must return a cleanup function, and nothing is done until
+it has been driven in a browser in both themes.
+
 ## Adding a lesson
 
 1. Create `assets/js/lessons/my-lesson.js` exporting a default object:
@@ -107,6 +121,8 @@ current theme's colours.
 ## Layout
 
 ```
+AGENTS.md               conventions for AI agents (Codex + anything else)
+CLAUDE.md               Claude Code entry point, points at AGENTS.md
 index.html              page shell: header, three regions
 assets/css/style.css    design tokens + all styling
 assets/js/app.js        hash router, search, scrollspy outline, progress
