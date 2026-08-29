@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Learn to Build — Visual AI Tutorials</title>
+<meta name="description" content="Learn to Build — an animated, interactive tutorial portal that teaches how modern AI works, one moving picture at a time.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%235b5bd6'/><path d='M30 26v48h40' fill='none' stroke='white' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-left">
+    <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="brand" href="#/" aria-label="Learn to Build home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><path d="M30 24v52h42" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-name">Learn to Build</span>
+        <span class="brand-sub">AI, one animation at a time</span>
+      </span>
+    </a>
+  </div>
+
+  <div class="header-search">
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="search" type="search" placeholder="Search lessons…" aria-label="Search lessons" autocomplete="off" spellcheck="false">
+    <kbd class="search-kbd">/</kbd>
+  </div>
+
+  <div class="header-right">
+    <button class="icon-btn" id="themeToggle" aria-label="Switch colour theme">
+      <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+      <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.2 8.2 0 019.6 4 8.5 8.5 0 1020 14.5z"/></svg>
+    </button>
+    <button class="icon-btn toc-toggle" id="tocToggle" aria-label="Open section outline" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M4 12h16M4 18h7"/></svg>
+    </button>
+  </div>
+  <div class="header-progress" id="headerProgress" aria-hidden="true"></div>
+</header>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="layout">
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar-left" id="sidebarLeft" aria-label="Course navigation">
+    <div class="course-progress">
+      <div class="course-progress-head">
+        <span>Your progress</span>
+        <span id="progressCount">0 / 0</span>
+      </div>
+      <div class="meter" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressMeter">
+        <span id="progressBar"></span>
+      </div>
+    </div>
+    <nav id="sidebarNav" class="sidebar-nav"></nav>
+    <p class="sidebar-empty" id="sidebarEmpty" hidden>No lessons match that search.</p>
+    <footer class="sidebar-foot">
+      <a href="https://github.com/bikashranjanbhol/learn-ai-with-animation" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="gh"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0012 2z" fill="currentColor" stroke="none"/></svg>
+        View source on GitHub
+      </a>
+    </footer>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main" class="main" tabindex="-1">
+    <article id="article" class="article"></article>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="sidebar-right" id="sidebarRight" aria-label="On this page">
+    <div class="toc-wrap">
+      <h2 class="toc-title">On this page</h2>
+      <nav id="toc" class="toc"></nav>
+      <div class="toc-actions">
+        <button class="btn-ghost" id="topBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg> Back to top
+        </button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>
