@@ -1,7 +1,7 @@
 import { scene, palette } from '../anim.js';
 
 export const home = {
-  body({ sections, lessons, done }) {
+  body({ tracks, lessons, done }) {
     const next = lessons.find(l => !done.has(l.id)) || lessons[0];
     const completed = lessons.filter(l => done.has(l.id)).length;
     const minutes = lessons.reduce((n, l) => n + l.minutes, 0);
@@ -25,18 +25,21 @@ export const home = {
           <circle cx="100" cy="100" r="15" fill="currentColor" style="color:var(--accent)" opacity=".9"/>
         </svg>
 
-        <div class="eyebrow"><span class="chip">Interactive course</span><span class="chip neutral">${lessons.length} lessons · ~${minutes} min</span></div>
-        <h1>Understand AI by<br>watching it work.</h1>
-        <p class="lede">Every idea here comes with something that moves — a neuron you can tune, a loss surface you can roll a ball down, an attention map you can hover. Read a little, then play with the thing you just read about.</p>
+        <div class="eyebrow">
+          <span class="chip">${tracks.length} tracks</span>
+          <span class="chip neutral">${lessons.length} lessons · ~${minutes} min</span>
+        </div>
+        <h1>Learn it by<br>watching it run.</h1>
+        <p class="lede">Two subjects, taught the same way: how AI models actually work, and how to design systems that survive real traffic. Every idea comes with something that moves — a neuron you can tune, a queue you can overload, a cache you can starve.</p>
         <div class="hero-cta">
           <a class="btn" href="#/${next.id}">${completed ? 'Continue' : 'Start'}: ${escape_(next.title)}
             <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn secondary" href="#/${lessons[0].id}">Start from the beginning</a>
+          ${tracks.map(t => `<a class="btn secondary" href="#/${t.lessons[0].id}">${escape_(t.track)} →</a>`).join('')}
         </div>
         <div class="stat-row">
           <div class="stat"><b>${completed}/${lessons.length}</b><span>lessons completed</span></div>
           <div class="stat"><b>${lessons.filter(l => l.interactive).length}</b><span>hands-on lessons</span></div>
-          <div class="stat"><b>0</b><span>maths prerequisites</span></div>
+          <div class="stat"><b>0</b><span>prerequisites</span></div>
         </div>
       </section>
 
@@ -45,25 +48,25 @@ export const home = {
         <div class="demo-stage"><canvas id="heroNet"></canvas></div>
       </div>
 
-      <h2>What you will learn</h2>
-      <p>The course runs in three passes. First the pieces, then the learning rule that tunes them, then the architecture that turned all of it into the models you use today.</p>
-
-      ${sections.map((s, i) => `
-        <h3>${i + 1}. ${escape_(s.title)}</h3>
-        <div class="card-grid">
-          ${s.lessons.map(l => `
-            <a class="card" href="#/${l.id}">
-              <span class="card-num">${l.minutes} min${done.has(l.id) ? ' · done' : ''}</span>
-              <h3>${escape_(l.title)}</h3>
-              <p>${l.summary.replace(/<[^>]+>/g, '')}</p>
-            </a>`).join('')}
-        </div>`).join('')}
+      ${tracks.map(t => `
+        <h2>${escape_(t.track)}</h2>
+        <p>${escape_(t.blurb)} <strong>${t.lessons.length} lessons</strong>, about ${t.minutes} minutes.</p>
+        ${t.sections.map(s => `
+          <h3>${escape_(s.title)}</h3>
+          <div class="card-grid">
+            ${s.lessons.map(l => `
+              <a class="card" href="#/${l.id}">
+                <span class="card-num">${l.minutes} min${done.has(l.id) ? ' · done' : ''}</span>
+                <h3>${escape_(l.title)}</h3>
+                <p>${l.summary.replace(/<[^>]+>/g, '')}</p>
+              </a>`).join('')}
+          </div>`).join('')}`).join('')}
 
       <h2>How to use this portal</h2>
       <ul>
-        <li><strong>Left rail</strong> — the whole syllabus. Your progress is stored in this browser, so the dots stay filled when you come back.</li>
+        <li><strong>Left rail</strong> — both tracks in full. Your progress is stored in this browser, so the dots stay filled when you come back.</li>
         <li><strong>Right rail</strong> — the outline of the page you are on; it follows you as you scroll.</li>
-        <li><strong>Search</strong> — press <code>/</code> anywhere to jump to the search box and filter lessons.</li>
+        <li><strong>Search</strong> — press <code>/</code> anywhere to jump to the search box and filter every lesson in both tracks.</li>
         <li><strong>Theme</strong> — the sun/moon button flips between light and dark; the demos repaint to match.</li>
       </ul>
       <div class="callout tip">

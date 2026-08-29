@@ -230,7 +230,21 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   border-radius: 99px; transition: width .45s var(--ease);
 }
 
-.sidebar-nav { display: flex; flex-direction: column; gap: 22px; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 26px; }
+.nav-track { display: flex; flex-direction: column; gap: 20px; }
+.nav-track[hidden] { display: none; }   /* the class rule would otherwise beat [hidden] */
+.nav-track + .nav-track { padding-top: 22px; border-top: 1px solid var(--border); }
+.nav-track-title {
+  display: flex; flex-direction: column; gap: 2px; margin: 0 0 -6px 2px;
+}
+.nav-track-title span {
+  font-family: var(--font-display); font-size: 13.5px; font-weight: 600;
+  color: var(--text); letter-spacing: -.01em;
+}
+.nav-track-title em {
+  font-style: normal; font-family: var(--font-mono);
+  font-size: 10.5px; color: var(--text-muted);
+}
 .nav-section-title {
   display: flex; align-items: center; gap: 8px;
   font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em;
@@ -616,3 +630,26 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
 .cand-p { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
 .cand.chosen .cand-tok { color: var(--accent-text); font-weight: 600; }
 .cand.chosen .cand-fill { background: var(--accent-3); }
+
+
+/* ---------- back-of-the-envelope calculator ---------- */
+.calc-grid {
+  display: grid; gap: 10px; margin-top: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+}
+.calc-cell {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 11px 13px; border-radius: 10px;
+  background: var(--bg-sunken); border: 1px solid var(--border);
+}
+.calc-cell.hot { border-color: var(--accent-3); background: color-mix(in srgb, var(--accent-3) 8%, var(--bg-sunken)); }
+.calc-label {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.calc-value {
+  font-family: var(--font-mono); font-size: 18px; font-weight: 500;
+  color: var(--text); letter-spacing: -.02em;
+}
+.calc-cell.hot .calc-value { color: var(--accent-3); }
+.calc-note { font-size: 11px; color: var(--text-muted); }

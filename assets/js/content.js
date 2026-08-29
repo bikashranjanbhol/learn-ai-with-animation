@@ -9,14 +9,51 @@ import embeddings   from './lessons/embeddings.js';
 import attention    from './lessons/attention.js';
 import generation   from './lessons/generation.js';
 
+import sdEstimation from './lessons/sd-estimation.js';
+import sdLatency    from './lessons/sd-latency.js';
+import sdCaching    from './lessons/sd-caching.js';
+import sdLoadBal    from './lessons/sd-load-balancing.js';
+import sdData       from './lessons/sd-data.js';
+import sdConsistency from './lessons/sd-consistency.js';
+import sdResilience from './lessons/sd-resilience.js';
+import sdCaseStudy  from './lessons/sd-case-study.js';
+
+export const AI = 'How AI Works';
+export const SD = 'System Design';
+
 export const sections = [
-  { title: 'Foundations',      lessons: [whatIsAi, neuron, network] },
-  { title: 'How Models Learn', lessons: [loss, gradient, backprop] },
-  { title: 'Modern AI',        lessons: [embeddings, attention, generation] },
+  { track: AI, title: 'Foundations',        lessons: [whatIsAi, neuron, network] },
+  { track: AI, title: 'How Models Learn',   lessons: [loss, gradient, backprop] },
+  { track: AI, title: 'Modern AI',          lessons: [embeddings, attention, generation] },
+
+  { track: SD, title: 'Sizing and Speed',   lessons: [sdEstimation, sdLatency, sdCaching] },
+  { track: SD, title: 'Scaling Out',        lessons: [sdLoadBal, sdData, sdConsistency] },
+  { track: SD, title: 'Staying Up',         lessons: [sdResilience, sdCaseStudy] },
 ];
 
-// Decorate each lesson with its section name, then flatten in reading order.
-sections.forEach(s => s.lessons.forEach(l => { l.section = s.title; }));
+// Decorate each lesson with where it sits, then flatten in reading order.
+sections.forEach(s => s.lessons.forEach(l => { l.section = s.title; l.track = s.track; }));
 
 export const lessons = sections.flatMap(s => s.lessons);
 export const byId = new Map(lessons.map(l => [l.id, l]));
+
+/** Sections grouped by track, in order, for the sidebar and the home page. */
+export const tracks = [AI, SD].map(track => {
+  const items = sections.filter(s => s.track === track);
+  const trackLessons = items.flatMap(s => s.lessons);
+  return {
+    track,
+    sections: items,
+    lessons: trackLessons,
+    minutes: trackLessons.reduce((n, l) => n + l.minutes, 0),
+    blurb: track === AI
+      ? 'What a model is, how it learns, and how a transformer turns that into text.'
+      : 'Estimating scale, keeping latency low, and staying up when parts fail.',
+  };
+});
+
+/** Position of a lesson within its own track — used for "Lesson 3 of 9". */
+export const trackPosition = lesson => {
+  const t = tracks.find(t => t.track === lesson.track);
+  return { index: t.lessons.indexOf(lesson) + 1, total: t.lessons.length };
+};

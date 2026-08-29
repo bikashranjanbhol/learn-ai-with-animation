@@ -1,7 +1,8 @@
 # Learn to Build
 
-An interactive tutorial portal that teaches how modern AI works — every concept
-paired with something you can drag, tune, or watch run.
+An interactive tutorial portal covering two subjects — how modern AI works, and
+how to design systems that scale — with every concept paired with something you
+can drag, tune, or watch run.
 
 **Live site:** https://bikashranjanbhol.github.io/learn-ai-with-animation/
 
@@ -10,7 +11,7 @@ paired with something you can drag, tune, or watch run.
 | Region | What it does |
 | --- | --- |
 | **Header** | Brand, lesson search (press <kbd>/</kbd>), light/dark toggle, reading-progress bar |
-| **Left sidebar** | The full syllabus grouped into three sections, with per-lesson completion tracking |
+| **Left sidebar** | Both tracks in full, grouped into sections, with per-lesson completion tracking |
 | **Main content** | The lesson itself, with live canvas demos inline |
 | **Right sidebar** | "On this page" outline that follows you as you scroll |
 
@@ -19,15 +20,31 @@ the navigation drawer.
 
 ## The course
 
+Two tracks, 17 lessons, ~135 minutes of reading, and an interactive demo in
+every one.
+
+### How AI Works (9 lessons)
+
 **Foundations** — what machine learning actually is · the artificial neuron ·
 layers and the forward pass
 
-**How models learn** — loss functions · gradient descent · backpropagation
+**How Models Learn** — loss functions · gradient descent · backpropagation
 
 **Modern AI** — embeddings · attention and the transformer · how a language
 model writes
 
-Nine lessons, ~68 minutes of reading, twelve interactive demos. Highlights:
+### System Design (8 lessons)
+
+**Sizing and Speed** — estimating before you design · latency, throughput and
+queues · caching
+
+**Scaling Out** — load balancing and horizontal scale · replication and
+sharding · consistency, CAP and stale reads
+
+**Staying Up** — timeouts, retries and back-pressure · case study: a URL
+shortener
+
+### Demos worth a look
 
 - A perceptron whose weights, bias and activation function you set by hand.
 - A ball you roll down a loss curve, with learning rate and momentum — push the
@@ -37,6 +54,12 @@ Nine lessons, ~68 minutes of reading, twelve interactive demos. Highlights:
   [`assets/js/lessons/backprop.js`](assets/js/lessons/backprop.js).
 - A self-attention map you can hover, and a token-by-token generator with a
   temperature dial.
+- A single-server queue simulation where latency goes vertical past ~80%
+  utilisation, plotted against the M/M/1 curve it is supposed to follow.
+- A cache with LRU/LFU/FIFO/random eviction over a Zipf-distributed key stream.
+- A consistent-hashing ring: add a server and compare how many keys move
+  against plain `hash(key) % N`.
+- A retry storm you can trigger, then stop with a circuit breaker.
 
 ## Running it locally
 
@@ -66,8 +89,10 @@ python3 -m http.server 8000
    ```
 
 2. Import it in [`assets/js/content.js`](assets/js/content.js) and drop it into
-   the section you want. Navigation, routing, the outline, prev/next paging and
-   progress tracking all follow from that one registry.
+   the section you want. Each section declares a `track`, and sections are
+   grouped by track in the sidebar and on the home page. Navigation, routing,
+   the outline, prev/next paging and progress tracking all follow from that one
+   registry.
 
 Canvas demos should use the helpers in
 [`assets/js/anim.js`](assets/js/anim.js) — `scene()` handles DPI scaling,
@@ -81,8 +106,9 @@ index.html              page shell: header, three regions
 assets/css/style.css    design tokens + all styling
 assets/js/app.js        hash router, search, scrollspy outline, progress
 assets/js/anim.js       canvas/animation helpers
-assets/js/content.js    course registry (order of lessons lives here)
+assets/js/content.js    course registry (tracks, sections and lesson order)
 assets/js/lessons/      one module per lesson, plus the home page
+                        (system design lessons are prefixed sd-)
 ```
 
 ## Deployment

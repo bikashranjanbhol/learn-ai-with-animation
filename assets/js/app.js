@@ -2,7 +2,7 @@
  * Learn to Build — portal shell.
  * Hash router + left course nav + right "on this page" outline with scrollspy.
  */
-import { sections, lessons, byId } from './content.js';
+import { sections, lessons, byId, tracks, trackPosition } from './content.js';
 import { home } from './lessons/home.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -66,19 +66,26 @@ function refreshProgress() {
 
 /* ------------------------- left navigation ------------------------- */
 function buildNav() {
-  els.nav.innerHTML = sections.map((section, i) => `
-    <div class="nav-section" data-section="${i}">
-      <h2 class="nav-section-title"><span class="num">${i + 1}</span>${section.title}</h2>
-      <ul class="nav-list">
-        ${section.lessons.map(l => `
-          <li>
-            <a class="nav-link" data-id="${l.id}" href="#/${l.id}" title="${esc(l.title)}">
-              <span class="dot"></span>
-              <span class="label">${esc(l.title)}</span>
-              <span class="mins">${l.minutes}m</span>
-            </a>
-          </li>`).join('')}
-      </ul>
+  els.nav.innerHTML = tracks.map(t => `
+    <div class="nav-track" data-track="${esc(t.track)}">
+      <p class="nav-track-title">
+        <span>${esc(t.track)}</span>
+        <em>${t.lessons.length} lessons · ${t.minutes} min</em>
+      </p>
+      ${t.sections.map((section, i) => `
+        <div class="nav-section" data-section="${sections.indexOf(section)}">
+          <h2 class="nav-section-title"><span class="num">${i + 1}</span>${esc(section.title)}</h2>
+          <ul class="nav-list">
+            ${section.lessons.map(l => `
+              <li>
+                <a class="nav-link" data-id="${l.id}" href="#/${l.id}" title="${esc(l.title)}">
+                  <span class="dot"></span>
+                  <span class="label">${esc(l.title)}</span>
+                  <span class="mins">${l.minutes}m</span>
+                </a>
+              </li>`).join('')}
+          </ul>
+        </div>`).join('')}
     </div>`).join('');
 }
 
@@ -106,6 +113,9 @@ function filterNav(query) {
     });
     sec.hidden = shown === 0;
     visible += shown;
+  });
+  document.querySelectorAll('.nav-track').forEach(tr => {
+    tr.hidden = ![...tr.querySelectorAll('.nav-section')].some(sec => !sec.hidden);
   });
   els.navEmpty.hidden = visible !== 0;
 }
@@ -160,8 +170,8 @@ function render() {
   if (typeof teardown === 'function') { try { teardown(); } catch { /* noop */ } teardown = null; }
 
   if (!lesson) {
-    document.title = 'Learn to Build — Visual AI Tutorials';
-    els.article.innerHTML = home.body({ sections, lessons, done });
+    document.title = 'Learn to Build — AI and System Design, Visually';
+    els.article.innerHTML = home.body({ tracks, lessons, done });
     markActiveNav(null);
     teardown = home.init?.(els.article) || null;
   } else {
@@ -184,10 +194,12 @@ function lessonShell(lesson) {
   const i = lessons.indexOf(lesson);
   const prev = lessons[i - 1], next = lessons[i + 1];
   const isDone = done.has(lesson.id);
+  const pos = trackPosition(lesson);
   return `
     <div class="eyebrow">
-      <span class="chip">${esc(lesson.section)}</span>
-      <span class="chip neutral">Lesson ${i + 1} of ${lessons.length}</span>
+      <span class="chip">${esc(lesson.track)}</span>
+      <span class="chip neutral">${esc(lesson.section)}</span>
+      <span class="chip neutral">Lesson ${pos.index} of ${pos.total}</span>
       <span class="chip neutral">${lesson.minutes} min read</span>
     </div>
     <h1>${esc(lesson.title)}</h1>
