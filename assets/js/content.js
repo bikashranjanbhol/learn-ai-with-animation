@@ -8,6 +8,7 @@ import backprop     from './lessons/backprop.js';
 import embeddings   from './lessons/embeddings.js';
 import attention    from './lessons/attention.js';
 import generation   from './lessons/generation.js';
+import promptEngineering from './lessons/prompt-engineering.js';
 
 import sdEstimation from './lessons/sd-estimation.js';
 import sdLatency    from './lessons/sd-latency.js';
@@ -20,6 +21,7 @@ import sdCaseStudy  from './lessons/sd-case-study.js';
 
 export const AI = 'How AI Works';
 export const SD = 'System Design';
+export const PE = 'Prompt Engineering';
 
 export const sections = [
   { track: AI, title: 'Foundations',        lessons: [whatIsAi, neuron, network] },
@@ -29,6 +31,8 @@ export const sections = [
   { track: SD, title: 'Sizing and Speed',   lessons: [sdEstimation, sdLatency, sdCaching] },
   { track: SD, title: 'Scaling Out',        lessons: [sdLoadBal, sdData, sdConsistency] },
   { track: SD, title: 'Staying Up',         lessons: [sdResilience, sdCaseStudy] },
+
+  { track: PE, title: 'Foundations',        lessons: [promptEngineering] },
 ];
 
 // Decorate each lesson with where it sits, then flatten in reading order.
@@ -38,7 +42,7 @@ export const lessons = sections.flatMap(s => s.lessons);
 export const byId = new Map(lessons.map(l => [l.id, l]));
 
 /** Sections grouped by track, in order, for the sidebar and the home page. */
-export const tracks = [AI, SD].map(track => {
+export const tracks = [AI, SD, PE].map(track => {
   const items = sections.filter(s => s.track === track);
   const trackLessons = items.flatMap(s => s.lessons);
   return {
@@ -48,7 +52,9 @@ export const tracks = [AI, SD].map(track => {
     minutes: trackLessons.reduce((n, l) => n + l.minutes, 0),
     blurb: track === AI
       ? 'What a model is, how it learns, and how a transformer turns that into text.'
-      : 'Estimating scale, keeping latency low, and staying up when parts fail.',
+      : track === SD
+        ? 'Estimating scale, keeping latency low, and staying up when parts fail.'
+        : 'Write clearer instructions, provide useful context, constrain outputs, and evaluate prompts systematically.',
   };
 });
 
