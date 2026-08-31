@@ -258,9 +258,15 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 
 .sidebar-nav { display: flex; flex-direction: column; gap: 26px; }
+
+/* Subject switcher — only needed at widths where the header menu is hidden. */
+.track-switch { display: none; }
+.track-switch[hidden] { display: none; }   /* beats the media-query rule below */
 .nav-track { display: flex; flex-direction: column; gap: 20px; }
 .nav-track[hidden] { display: none; }   /* the class rule would otherwise beat [hidden] */
 .nav-track + .nav-track { padding-top: 22px; border-top: 1px solid var(--border); }
+/* no divider when the track above it is the hidden one */
+.nav-track[hidden] + .nav-track { padding-top: 0; border-top: none; }
 .nav-track-title {
   display: flex; flex-direction: column; gap: 2px; margin: 0 0 -6px 2px;
 }
@@ -596,8 +602,29 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
   .sidebar-right.open { transform: none; }
 }
 @media (max-width: 900px) {
-  /* below this the sidebar (or its drawer) carries both tracks in full */
+  /* the header menu gives way to the switcher at the top of the sidebar */
   .header-nav { display: none; }
+  .track-switch {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+    padding: 4px; margin-bottom: 4px;
+    background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  .track-switch a {
+    padding: 8px 6px; border-radius: 9px;
+    font-size: 12px; font-weight: 600; letter-spacing: -.01em; text-align: center;
+    color: var(--text-muted); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    transition: background .15s, color .15s;
+  }
+  .track-switch a:hover { color: var(--text); text-decoration: none; }
+  .track-switch a[aria-pressed="true"] {
+    background: var(--surface); color: var(--accent-text);
+    box-shadow: var(--shadow-sm);
+  }
+  /* the active pill already names the subject, so drop the duplicate heading —
+     except while searching, when both subjects are listed and need labels */
+  .nav-track:not(.searching) .nav-track-title { display: none; }
 }
 @media (max-width: 860px) {
   :root { --gutter: 0px; }

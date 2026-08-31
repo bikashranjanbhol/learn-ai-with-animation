@@ -54,8 +54,9 @@ let done = readDone();
 const saveDone = () => localStorage.setItem(DONE_KEY, JSON.stringify([...done]));
 
 function refreshProgress() {
-  const total = lessons.length;
-  const count = lessons.filter(l => done.has(l.id)).length;
+  const scope = tracks.find(t => t.track === activeTrack)?.lessons || lessons;
+  const total = scope.length;
+  const count = scope.filter(l => done.has(l.id)).length;
   const pct = total ? Math.round((count / total) * 100) : 0;
   els.progressBar.style.width = pct + '%';
   els.progressCount.textContent = `${count} / ${total}`;
@@ -66,12 +67,25 @@ function refreshProgress() {
 }
 
 /* -------------------------- header menu -------------------------- */
+const TRACK_KEY = 'ltb:track';
 const RESUME_KEY = 'ltb:resume';
 const readResume = () => {
   try { return JSON.parse(localStorage.getItem(RESUME_KEY) || '{}'); }
   catch { return {}; }
 };
 let resume = readResume();
+// the sidebar shows one subject at a time; this is the one it is showing
+let activeTrack = tracks.some(t => t.track === localStorage.getItem(TRACK_KEY))
+  ? localStorage.getItem(TRACK_KEY)
+  : tracks[0].track;
+
+function setActiveTrack(track) {
+  if (!track || track === activeTrack) return;
+  activeTrack = track;
+  localStorage.setItem(TRACK_KEY, track);
+  buildNav();
+  refreshProgress();
+}
 
 const TRACK_ICONS = {
   'How AI Works': '<circle cx="6" cy="6.5" r="2.1"/><circle cx="6" cy="17.5" r="2.1"/><circle cx="18" cy="12" r="2.3"/><path d="M8 7.6l7.9 3.5M8 16.4l7.9-3.5"/>',
@@ -97,7 +111,12 @@ function markActiveTrack(lesson) {
   if (lesson) {
     resume[lesson.track] = lesson.id;
     localStorage.setItem(RESUME_KEY, JSON.stringify(resume));
+    setActiveTrack(lesson.track);
   }
+  els.nav.querySelectorAll('.track-switch a').forEach(a => {
+    const on = a.dataset.track === activeTrack;
+    a.setAttribute('aria-pressed', String(on));
+  });
   els.headerNav.querySelectorAll('a').forEach(a => {
     const t = tracks.find(t => t.track === a.dataset.track);
     a.href = `#/${trackTarget(t)}`;
@@ -110,7 +129,14 @@ function markActiveTrack(lesson) {
 
 /* ------------------------- left navigation ------------------------- */
 function buildNav() {
-  els.nav.innerHTML = tracks.map(t => `
+  const switcher = `
+    <div class="track-switch" role="group" aria-label="Choose a subject">
+      ${tracks.map(t => `
+        <a data-track="${esc(t.track)}" href="#/${trackTarget(t)}"
+           aria-pressed="${t.track === activeTrack}">${esc(t.track)}</a>`).join('')}
+    </div>`;
+
+  els.nav.innerHTML = switcher + tracks.map(t => `
     <div class="nav-track" data-track="${esc(t.track)}">
       <p class="nav-track-title">
         <span>${esc(t.track)}</span>
@@ -131,6 +157,8 @@ function buildNav() {
           </ul>
         </div>`).join('')}
     </div>`).join('');
+
+  filterNav(els.search.value);
 }
 
 function markActiveNav(id) {
@@ -158,11 +186,18 @@ function filterNav(query) {
     sec.hidden = shown === 0;
     visible += shown;
   });
+  // With no query the rail shows only the subject you are in; a search is
+  // deliberately global, so results from the other subject stay reachable.
   document.querySelectorAll('.nav-track').forEach(tr => {
-    tr.hidden = ![...tr.querySelectorAll('.nav-section')].some(sec => !sec.hidden);
+    const hasMatch = [...tr.querySelectorAll('.nav-section')].some(sec => !sec.hidden);
+    const inScope = q ? true : tr.dataset.track === activeTrack;
+    tr.hidden = !hasMatch || !inScope;
+    tr.classList.toggle('searching', !!q);
   });
+  els.nav.querySelector('.track-switch').hidden = !!q;
   els.navEmpty.hidden = visible !== 0;
 }
+
 els.search.addEventListener('input', e => filterNav(e.target.value));
 
 /* ------------------------------- TOC ------------------------------- */

@@ -11,17 +11,23 @@ can drag, tune, or watch run.
 | Region | What it does |
 | --- | --- |
 | **Header** | Brand, a menu of the two subjects, lesson search (press <kbd>/</kbd>), light/dark toggle, reading-progress bar |
-| **Left sidebar** | Both tracks in full, grouped into sections, with per-lesson completion tracking |
+| **Left sidebar** | The lessons of the subject you are in, grouped into sections, with completion tracking |
 | **Main content** | The lesson itself, with live canvas demos inline |
 | **Right sidebar** | "On this page" outline that follows you as you scroll |
 
-Each subject in the header menu highlights while you are reading it and links
-back to the last lesson you had open in that track, so switching subjects
-resumes rather than restarts.
+The header menu is the subject switcher. The entry for the subject you are
+reading is highlighted, and each entry links back to the last lesson you had
+open in that track, so switching subjects resumes rather than restarts.
 
-On narrow screens both sidebars become drawers, the subject menu gives way to
-the drawer (which lists both tracks in full), and the search box moves into
-that drawer.
+The sidebar is scoped to one subject at a time — it lists the lessons of the
+track you are in, and the progress meter counts that track only. Search is the
+exception: a query deliberately reaches across both subjects and labels results
+by track, so nothing becomes unreachable just because you are in the other one.
+
+On narrow screens both sidebars become drawers and the search box moves into
+the navigation drawer. Below 900px the header menu gives way to a segmented
+subject switcher at the top of that drawer, so subjects stay switchable when
+the header has no room.
 
 ## The course
 

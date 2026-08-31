@@ -94,6 +94,12 @@ from that one registry — never hand-write a link to a lesson.
 sidebar and header menu are generated from `tracks`, so a new track needs no
 markup.
 
+**The sidebar shows one track at a time** — the one whose lesson is open
+(`activeTrack` in `app.js`, persisted). Both tracks are always rendered into the
+DOM and the out-of-scope one is hidden, because a search must still reach across
+subjects; do not "optimise" this by rendering only the active track, or global
+search breaks.
+
 ### Content rules
 
 - **Every lesson carries a working demo, not a diagram.** The bar in this repo
