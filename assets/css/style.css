@@ -586,9 +586,6 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
   :root { --left-w: 250px; --right-w: 210px; --gutter: 30px; }
   .brand-sub { display: none; }                 /* the menu is worth more than the tagline */
 }
-@media (max-width: 1000px) {
-  .header-nav a { padding: 7px 10px; gap: 7px; font-size: 13px; }
-}
 @media (max-width: 1080px) {
   .layout { grid-template-columns: var(--left-w) minmax(0, 1fr); }
   .toc-toggle { display: grid; }
@@ -601,16 +598,18 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
   }
   .sidebar-right.open { transform: none; }
 }
-@media (max-width: 900px) {
-  /* the header menu gives way to the switcher at the top of the sidebar */
+@media (max-width: 1000px) {
+  /* the header menu gives way to the switcher at the top of the sidebar;
+     with three subjects it needs the room before the search box is squeezed */
   .header-nav { display: none; }
   .track-switch {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+    display: flex; flex-wrap: wrap; gap: 4px;   /* adapts to any number of tracks */
     padding: 4px; margin-bottom: 4px;
     background: var(--surface-2);
     border: 1px solid var(--border); border-radius: 12px;
   }
   .track-switch a {
+    flex: 1 1 108px;
     padding: 8px 6px; border-radius: 9px;
     font-size: 12px; font-weight: 600; letter-spacing: -.01em; text-align: center;
     color: var(--text-muted); white-space: nowrap;

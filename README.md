@@ -1,8 +1,7 @@
 # Learn to Build
 
-An interactive tutorial portal covering two subjects — how modern AI works, and
-how to design systems that scale — with every concept paired with something you
-can drag, tune, or watch run.
+An interactive tutorial portal covering three subjects — how modern AI works,
+how to design systems that scale, and how to prompt models well.
 
 **Live site:** https://bikashranjanbhol.github.io/learn-ai-with-animation/
 
@@ -31,8 +30,9 @@ the header has no room.
 
 ## The course
 
-Two tracks, 17 lessons, ~135 minutes of reading, and an interactive demo in
-every one.
+Three tracks, 29 lessons. The AI and System Design tracks pair every lesson with
+an interactive demo you can drag, tune or watch run; Prompt Engineering is
+currently prose and worked examples.
 
 ### How AI Works (9 lessons)
 
@@ -54,6 +54,20 @@ sharding · consistency, CAP and stale reads
 
 **Staying Up** — timeouts, retries and back-pressure · case study: a URL
 shortener
+
+### Prompt Engineering (12 lessons)
+
+**Foundations** — what prompt engineering is · anatomy of a strong prompt ·
+roles and instruction hierarchy
+
+**Prompting Techniques** — zero-shot and few-shot · reasoning and decomposition ·
+structured outputs
+
+**Context and Tools** — context engineering · RAG prompting · tool calling and
+agents
+
+**Reliability and Production** — injection and safety · evaluation · production
+prompting
 
 ### Demos worth a look
 
